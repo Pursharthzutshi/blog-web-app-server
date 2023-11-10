@@ -26,7 +26,7 @@ app.use(cors({
     credentials:true
 }))
 
-mongoose.connect("mongodb://localhost:27017/BlogWebApp").then(()=>{
+mongoose.connect("mongodb+srv://13phzi:ODnddIeazNM8GNhM@cluster0.m8wabkl.mongodb.net/?retryWrites=true&w=majority/BlogWebApp").then(()=>{
  console.log("connection made")
 })
 
