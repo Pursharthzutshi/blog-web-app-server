@@ -20,21 +20,11 @@ app.use(session({
 }))
 
 
-app.use(
-    cors({
-    origin:"https://blog-web-app-client-bay.vercel.app",
-    method:["POST","GET","PUT","DELETE"],
+app.use(cors({
+    origin:["http://localhost:3000"],
+    method:["POST","GET"],
     credentials:true
-})
-)
-
-// app.use(
-//     cors({
-//       origin:process.env.FRONTEND_URL,// origin:"*" dosen't works with credentials:true,
-//       credentials: true,
-//       methods: ["GET", "POST", "PUT", "DELETE"],
-//     })
-// );
+}))
 
 mongoose.connect(`mongodb+srv://13phzi:BGbeXfcV4dp9LX4G@cluster0.m8wabkl.mongodb.net/blogWebApp?retryWrites=true&w=majority`).then((res)=>{
  console.log("connection made");
