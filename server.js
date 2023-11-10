@@ -21,7 +21,7 @@ app.use(session({
 
 
 app.use(cors({
-    origin:["https://blog-web-app-client-bay.vercel.app"],
+    origin:["https://blog-web-app-client-bay.vercel.app/"],
     method:["POST","GET"],
     credentials:true
 }))
