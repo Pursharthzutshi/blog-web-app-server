@@ -7,8 +7,5 @@
     "mongoose": "^7.3.1",
     "mysql": "^2.18.1",
     "session": "^0.1.0",
-    "engines": {
-    "node": "14.x"
-  },
   }
 }
