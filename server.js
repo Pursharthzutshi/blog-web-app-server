@@ -110,6 +110,9 @@ app.get("/testTwo",async (req,res)=>{
     res.send("asd")
 })
 
+app.get("/",(req,res)=>{
+    res.send("Hello");
+})
 
 app.post("/writeBlogData",async (req,res)=>{
 
