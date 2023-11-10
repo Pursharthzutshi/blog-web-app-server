@@ -26,8 +26,8 @@ app.use(cors({
     credentials:true
 }))
 
-mongoose.connect("mongodb+srv://13phzi:ODnddIeazNM8GNhM@cluster0.m8wabkl.mongodb.net/?retryWrites=true&w=majority/BlogWebApp").then(()=>{
- console.log("connection made")
+mongoose.connect(`mongodb+srv://13phzi:BGbeXfcV4dp9LX4G@cluster0.m8wabkl.mongodb.net/blogWebApp?retryWrites=true&w=majority`).then((res)=>{
+ console.log("connection made");
 })
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -36,17 +36,17 @@ app.use(bodyParser.json())
 const userSignUp = new mongoose.Schema({
     name:{
         type:String,
-        required:true
+        // required:true
     },
     Emailid:{
         type:String,
-        index:true,
-        unique:true,
-        required:true
+        // index:true,
+        // unique:true,
+        // required:true
     },
     password:{
         type:String,
-        required:true
+        // required:true
     }
 })
 
@@ -78,41 +78,51 @@ const userSignUpTable = mongoose.model("usersignupinfo",userSignUp,"usersignupin
 
 const usersBlogsDataTable = mongoose.model("usersblogsdata",usersblogsdata,"usersblogsdata")
 
+// const userSignUpTable = mongoose.model("usersignupinfo",userSignUp)
 
+// const usersBlogsDataTable = mongoose.model("usersblogsdata",usersblogsdata)
 
-app.get("/test",async (req,res)=>{
-    const email = "john@gmail.com"
-    const content = "web dev"
-    const topic = "web dev"
-    const author = "john"
+app.get("/CreateTable",async (req,res)=>{
+    await userSignUpTable();
+    res.send("Table created");
+})
 
-    // _id:userSignUpTable.find({Emailid:email})
-
-    const data = await userSignUpTable.find({Emailid:email})
-
-    console.log(data[0].id)
-
-    usersBlogsDataTable.insertMany({_id:data[0].id,Emailid:email,topic:topic,content:content,author:author})
-
-    res.send("asd")
+app.get("/CreateTableBlogsData",async (req,res)=>{
+    await usersBlogsDataTable();
+    res.send("Table CreateTableBlogsData");
 })
 
 
-app.get("/testTwo",async (req,res)=>{
-    const email = "john@gmail.com"
-    const content = "web dev"
-    const topic = "web dev"
-    const author = "john"
+// app.get("/test",async (req,res)=>{
+//     const email = "john@gmail.com"
+//     const content = "web dev"
+//     const topic = "web dev"
+//     const author = "john"
+
+//     // _id:userSignUpTable.find({Emailid:email})
+
+//     const data = await userSignUpTable.find({Emailid:email})
+
+//     console.log(data[0].id)
+
+//     usersBlogsDataTable.insertMany({_id:data[0].id,Emailid:email,topic:topic,content:content,author:author})
+
+//     res.send("asd")
+// })
 
 
-    const data = await userSignUpTable.find({Emailid:email})
+// app.get("/testTwo",async (req,res)=>{
+//     const email = "john@gmail.com"
+//     const content = "web dev"
+//     const topic = "web dev"
+//     const author = "john"
 
-    res.send("asd")
-})
 
-app.get("/",(req,res)=>{
-    res.send("Hello");
-})
+//     const data = await userSignUpTable.find({Emailid:email})
+
+//     res.send("asd")
+// })
+
 
 app.post("/writeBlogData",async (req,res)=>{
 
@@ -220,9 +230,13 @@ app.put("/updateBlogTitle/:updateBlogId",async (req,res)=>{
 
     const updateBlogId = req.params.updateBlogId
     const updatedBlogTitle = req.body.updatedBlogTitle
-    const myProfileBlogsData = await usersBlogsDataTable.updateOne({_id:updateBlogId},{$set:{title:updatedBlogTitle}})
-    // res.send(myProfileBlogsData)
-    res.send("Title Updated")
+
+    if(updatedBlogTitle.length < 30 || updatedBlogTitle.length > 150 ){
+        res.send("Title should be between 30 and 150")
+    }else{
+        await usersBlogsDataTable.updateOne({_id:updateBlogId},{$set:{title:updatedBlogTitle}})
+        res.send("Title Updated")
+    }
 
 })
 
@@ -231,9 +245,12 @@ app.put("/updateBlogTopic/:updateBlogId",async (req,res)=>{
     const updateBlogId = req.params.updateBlogId
     const updatedBlogTopic = req.body.updatedBlogTopic
 
-    const myProfileBlogsData = await usersBlogsDataTable.updateOne({_id:updateBlogId},{$set:{topic:updatedBlogTopic}})
-    // res.send(myProfileBlogsData)
-    res.send("Topic Updated")
+    if(updatedBlogTopic === ""){
+        res.send("Choose topic")
+    }else{
+        await usersBlogsDataTable.updateOne({_id:updateBlogId},{$set:{topic:updatedBlogTopic}})
+        res.send("Topic Updated")
+    }
 
 })
 
@@ -242,25 +259,16 @@ app.put("/updateBlogContent/:updateBlogId",async (req,res)=>{
     const updateBlogId = req.params.updateBlogId
     const updatedBlogContent = req.body.updatedBlogContent
 
-    console.log(updateBlogId)
-    const myProfileBlogsData = await usersBlogsDataTable.updateOne({_id:updateBlogId},{$set:{content:updatedBlogContent}})
-    // res.send(myProfileBlogsData)
-    res.send("Content Updated")
+    if(updatedBlogContent < 300 || updatedBlogContent > 2000){
+        res.send("Content Length should be between 300 and 2000")
+    }else{
+        await usersBlogsDataTable.updateOne({_id:updateBlogId},{$set:{content:updatedBlogContent}})
+        res.send("content updated")
+    }
+
 
 })
 
-
-
-
-app.get("/CreateTable",async (req,res)=>{
-    await userSignUpTable();
-    res.send("Table created")
-})
-
-app.get("/CreateTableBlogsData",async (req,res)=>{
-    await usersBlogsDataTable();
-    res.send("Table CreateTableBlogsData")
-})
 
 
 app.post("/SignUpDataInsert",async (req,res)=>{
