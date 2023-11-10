@@ -135,7 +135,7 @@ app.get("/CreateTableBlogsData",async (req,res)=>{
 
 
 app.post("/writeBlogData",async (req,res)=>{
-
+console.log("start");
     const title = req.body.title
     const topic = req.body.topic
     const content = req.body.content
@@ -144,8 +144,15 @@ app.post("/writeBlogData",async (req,res)=>{
     console.log(loggedInEmailId)
     console.log(showLogInStatus)
 
+    console.log("middle");
+
+    console.log(title);
+    console.log(topic);
+    console.log(content);
+
     if(title === "" || content === ""){
         res.json({ErrorMsg:"Please fill Your Content"});
+
     }else if(topic === ""){
         res.json({ErrorMsg:"Please fill The Topic"});
     }else if(content.length < 300 || content.length < 2000){
@@ -161,6 +168,7 @@ app.post("/writeBlogData",async (req,res)=>{
           res.send("data sent");
     }
 
+    console.log("end");
 
 })
 
